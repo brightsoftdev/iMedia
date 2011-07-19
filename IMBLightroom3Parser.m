@@ -55,6 +55,7 @@
 #import "IMBLightroom3Parser.h"
 
 #import <Quartz/Quartz.h>
+#import <ObjectiveFlickr/ObjectiveFlickr.h>
 
 #import "FMDatabase.h"
 #import "IMBNode.h"
@@ -65,6 +66,11 @@
 #import "NSImage+iMedia.h"
 #import "NSWorkspace+iMedia.h"
 #import "IMBSandboxUtilities.h"
+
+
+#ifndef IMB_TRY_HARD_LINKS_FOR_CLONES
+#define IMB_TRY_HARD_LINKS_FOR_CLONES 0
+#endif
 
 
 @interface IMBLightroom3Parser ()
@@ -480,7 +486,7 @@
 			NSData* jpegData = nil;
             
             if ((index + headerLengthValue + dataLengthValue) < [data length]) {
-                [data subdataWithRange:NSMakeRange(index + headerLengthValue, dataLengthValue)];
+				jpegData = [data subdataWithRange:NSMakeRange(index + headerLengthValue, dataLengthValue)];
             }
             
 			return jpegData;
@@ -514,46 +520,97 @@
 	return database;
 }
 
-+ (NSString*)cloneDatabase:(NSString*)databasePath
++ (BOOL)isFile:(NSString*)originalPath newerThan:(NSString*)copyPath
 {
-	// BEGIN ugly hack to work around Lightroom locking its database
-	
-	NSString *basePath = [databasePath stringByDeletingPathExtension];	
-	NSString *pathExtension = [databasePath pathExtension];	
-	NSString *readOnlyDatabasePath = [[NSString stringWithFormat:@"%@-readOnly", basePath] stringByAppendingPathExtension:pathExtension];
-	
 	NSFileManager *fileManager = [NSFileManager imb_threadSafeManager];
-	BOOL needToCopyFile = YES;		// probably we will need to copy but let's check
-	NSError* error;
+	
+	NSError *error = nil;
+	NSDictionary *attributesOfCopy = [fileManager attributesOfItemAtPath:copyPath error:&error];
+	
+	if (error != nil) {
+		NSLog(@"Unable to fetch attributes from %@: %@", copyPath, error.localizedDescription);
+		
+		return YES;
+	}
+	
+	NSDictionary *attributesOfOrig = [fileManager attributesOfItemAtPath:originalPath error:&error];
+	
+	if (error != nil) {
+		NSLog(@"Unable to fetch attributes from %@: %@", originalPath, error.localizedDescription);
+		
+		return YES;
+	}
+	
+	NSDate *modDateOfCopy = [attributesOfCopy fileModificationDate];
+	NSDate *modDateOfOrig = [attributesOfOrig fileModificationDate];
+	
+	if ([modDateOfOrig compare:modDateOfCopy] != NSOrderedSame) {
+		return YES;
+	}
+	
+	return NO;
+}
+
++ (NSString*)cloneDatabase:(NSString*)databasePath
+{	
+	if (databasePath == nil) {
+		return nil;
+	}
+
+	NSFileManager *fileManager = [NSFileManager imb_threadSafeManager];
+	
+	NSString *targetDirectory = [fileManager imb_tempFolderForPath:databasePath];
+	
+	if ([targetDirectory length] == 0) {
+		targetDirectory = [fileManager imb_sharedTemporaryFolder:nil];
+	}
+	
+	if ([targetDirectory length] == 0) {
+		NSArray *cachesDirectories = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+		
+		targetDirectory = [cachesDirectories lastObject];
+	}
+	
+	NSString *databaseFolder = [databasePath stringByDeletingLastPathComponent];
+	NSString *databaseFolderHash = OFMD5HexStringFromNSString(databaseFolder);
+	NSString *cloneDirectory = [targetDirectory stringByAppendingPathComponent:@"Lightroom"];
+	NSString *readOnlyDatabaseDirectory = [cloneDirectory stringByAppendingPathComponent:databaseFolderHash];
+		
+	NSError *error = nil;
+	
+	if (! [fileManager createDirectoryAtPath:readOnlyDatabaseDirectory
+				 withIntermediateDirectories:YES
+								  attributes:nil
+									   error:&error]) {
+		NSLog(@"Unable to create clone directory %@: %@", readOnlyDatabaseDirectory, error.localizedDescription);
+		
+		return databasePath;
+	}
+	
+	NSString *readOnlyDatabasePath = [readOnlyDatabaseDirectory stringByAppendingPathComponent:[databasePath lastPathComponent]];
+	BOOL needToCopyFile = YES;
 	
 	if ([fileManager fileExistsAtPath:readOnlyDatabasePath]) {
-		error = nil;
-		NSDictionary *attributesOfCopy = [fileManager attributesOfItemAtPath:readOnlyDatabasePath error:&error];
-		if (error) NSLog (@"Unable to fetch attributes from %@: %@", readOnlyDatabasePath, error.localizedDescription);
-		NSDate *modDateOfCopy = [attributesOfCopy fileModificationDate];
-		
-		error = nil;
-		NSDictionary *attributesOfOrig = [fileManager attributesOfItemAtPath:databasePath error:&error];
-		if (error) NSLog (@"Unable to fetch attributes from %@: %@", databasePath, error.localizedDescription);
-		NSDate *modDateOfOrig = [attributesOfOrig fileModificationDate];
-		
-		if (NSOrderedSame == [modDateOfOrig compare:modDateOfCopy]) {
-			needToCopyFile = NO;
-		}
+		needToCopyFile = [self isFile:databasePath newerThan:readOnlyDatabasePath];
 	}
 	
 	if (needToCopyFile) {
-		(void) [fileManager removeItemAtPath:readOnlyDatabasePath error:&error];
-		BOOL copied = (nil != databasePath)
-					&& (nil != readOnlyDatabasePath)
-					&& [fileManager copyItemAtPath:databasePath toPath:readOnlyDatabasePath error:&error];
+		(void)[fileManager removeItemAtPath:readOnlyDatabasePath error:NULL];
+
+		BOOL tryHardLinking = NO;
 		
-		if (!copied) {
-			NSLog (@"Unable to copy database file at %@: %@", databasePath, error.localizedDescription);
+#if IMB_TRY_HARD_LINKS_FOR_CLONES
+		tryHardLinking = YES;
+#endif
+		
+		if ((! tryHardLinking) || (! [fileManager linkItemAtPath:databasePath toPath:readOnlyDatabasePath error:NULL])) {
+			if (! [fileManager copyItemAtPath:databasePath toPath:readOnlyDatabasePath error:&error]) {
+				NSLog(@"Unable to copy database file at %@: %@", databasePath, error.localizedDescription);
+			
+				return databasePath;
+			}
 		}
 	}
-	
-	// END ugly hack
 	
 	return readOnlyDatabasePath;
 }

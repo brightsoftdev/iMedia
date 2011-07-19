@@ -67,4 +67,6 @@
 - (BOOL) imb_fileExistsAtPath:(NSString**)ioPath wasChanged:(BOOL*)outWasChanged;
 - (NSString *) imb_generateUniqueFileNameAtPath:(NSString *)path base:(NSString *)basename extension:(NSString *)extension;
 
+- (NSString*) imb_tempFolderForPath:(NSString *)inAbsolutePath;
+
 @end

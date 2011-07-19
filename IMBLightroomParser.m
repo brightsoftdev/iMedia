@@ -1292,7 +1292,7 @@ static NSArray* sSupportedUTIs = nil;
 		if (foundDatabase == nil) {
 			foundDatabase = [self libraryDatabase];
 			
-			if ([foundDatabase open]) {
+			if ([foundDatabase openWithFlags:SQLITE_OPEN_READONLY]) {
 				[_databases setObject:foundDatabase forKey:[NSValue valueWithPointer:[NSThread currentThread]]];
 			}
 		}
@@ -1309,7 +1309,7 @@ static NSArray* sSupportedUTIs = nil;
 		if (foundDatabase == nil) {
 			foundDatabase = [self previewsDatabase];
 			
-			if ([foundDatabase open]) {
+			if ([foundDatabase openWithFlags:SQLITE_OPEN_READONLY]) {
 				[_thumbnailDatabases setObject:foundDatabase forKey:[NSValue valueWithPointer:[NSThread currentThread]]];
 			}
 		}
