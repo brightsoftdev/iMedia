@@ -477,6 +477,7 @@
 		CE69E9DA114B05EA0016E5E0 /* firefox_bookmarksToolbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = firefox_bookmarksToolbar.png; sourceTree = "<group>"; };
 		CE69E9DB114B05EA0016E5E0 /* firefox_unfiledBookmarks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = firefox_unfiledBookmarks.png; sourceTree = "<group>"; };
 		CE69E9DC114B05EA0016E5E0 /* firefox_tag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = firefox_tag.png; sourceTree = "<group>"; };
+		CE87008C146204E300CAFED2 /* zh_CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh_CN; path = zh_CN.lproj/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		CEA8A04912D3EC70008CD7CB /* IMBSmartFolderNodeObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IMBSmartFolderNodeObject.h; sourceTree = "<group>"; };
 		CEA8A04A12D3EC70008CD7CB /* IMBSmartFolderNodeObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IMBSmartFolderNodeObject.m; sourceTree = "<group>"; };
 		CEAF1F22125A7DBF001C3EBB /* iMedia.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = iMedia.tiff; sourceTree = "<group>"; };
@@ -691,7 +692,6 @@
 		D099326910111DCB00C527B7 /* NSString+iMedia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+iMedia.h"; sourceTree = "<group>"; };
 		D099328F1011227100C527B7 /* IMBImageFolderParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IMBImageFolderParser.h; sourceTree = "<group>"; };
 		D09932901011227100C527B7 /* IMBImageFolderParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IMBImageFolderParser.m; sourceTree = "<group>"; };
-		D0993294101124EE00C527B7 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = /usr/lib/libcrypto.dylib; sourceTree = "<absolute>"; };
 		D0993302101197D100C527B7 /* IMBNodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IMBNodeViewController.m; sourceTree = "<group>"; };
 		D0993303101197D100C527B7 /* IMBNodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IMBNodeViewController.h; sourceTree = "<group>"; };
 		D099330B10119D8200C527B7 /* IMBNodeTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IMBNodeTreeController.h; sourceTree = "<group>"; };
@@ -886,7 +886,6 @@
 		1058C7B2FEA5585E11CA2CBB /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D0993294101124EE00C527B7 /* libcrypto.dylib */,
 				0867D6A5FE840307C02AAC07 /* AppKit.framework */,
 				D2F7E79907B2D74100F64583 /* CoreData.framework */,
 				0867D69BFE84028FC02AAC07 /* Foundation.framework */,
@@ -1594,6 +1593,7 @@
 				es,
 				ja,
 				pt_BR,
+				zh_CN,
 			);
 			mainGroup = 0867D691FE84028FC02AAC07 /* iMedia */;
 			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
@@ -1930,6 +1930,7 @@
 				FCEFB408135332360043CBEB /* es */,
 				FCEFB40C135332530043CBEB /* ja */,
 				CE1DE6481386E2E600C3F780 /* pt_BR */,
+				CE87008C146204E300CAFED2 /* zh_CN */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1948,6 +1949,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = iMedia;
+				VALID_ARCHS = "ppc i386 x86_64";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -1963,6 +1965,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = iMedia;
+				VALID_ARCHS = "ppc i386 x86_64";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
@@ -2030,6 +2033,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = iMedia;
+				VALID_ARCHS = "ppc i386 x86_64";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Test;
