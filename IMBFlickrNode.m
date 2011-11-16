@@ -117,9 +117,8 @@ NSString* const IMBFlickrNodeProperty_UUID = @"uuid";
 	//node.parentNode = root;
 	node.parser = parser;
 	
-	//	Leaving subNodes and objects nil, will trigger a populateNode:options:error: 
+	//	Leaving subnodes and objects nil, will trigger a populateNode:options:error: 
 	//	as soon as the root node is opened.
-	node.subNodes = nil;
 	node.objects = nil;
 	
 	node.badgeTypeNormal = kIMBBadgeTypeReload;
@@ -172,9 +171,8 @@ NSString* const IMBFlickrNodeProperty_UUID = @"uuid";
 	node.leaf = YES;	
 	node.attributes = [NSMutableDictionary dictionary];
 	
-	//	Leaving subNodes and objects nil, will trigger a populateNode:options:error: 
+	//	Leaving subnodes and objects nil, will trigger a populateNode:options:error: 
 	//	as soon as the root node is opened.
-	node.subNodes = nil;
 	node.objects = nil;
 	
 	node.badgeTypeNormal = kIMBBadgeTypeReload;
@@ -628,5 +626,14 @@ typedef enum {
 	self.query = query;
 	self.sortOrder = [[dictionary objectForKey:IMBFlickrNodeProperty_SortOrder] intValue];
 }
+
+
+- (void) resetSubnodes
+{
+	[self willChangeValueForKey:@"subnodes"];
+	IMBRelease(_subnodes);
+	[self didChangeValueForKey:@"subnodes"];
+}
+
 
 @end

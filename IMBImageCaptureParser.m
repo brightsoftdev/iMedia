@@ -228,7 +228,7 @@
 	NSError* error = nil;
 	
 	if( !inNode.objects ||
-	   !inNode.subNodes )
+	   !inNode.subnodes )
 	{ // only populate if empty
 		
 		ICAObject object = [inNode.mediaSource intValue];
@@ -271,7 +271,7 @@
 	{
 		newNode = [[self nodeCopy:inOldNode] autorelease];
 		// already done in copyNode:
-		// if ( [inOldNode.subNodes count] || [inOldNode.objects count]  )
+		// if ( [inOldNode.subnodes count] || [inOldNode.objects count]  )
 		// { 	// If the old node had subnodes, then look for subnodes in the new node...
 		// 	[self populateNode:newNode options:inOptions error:&error];
 		// }
@@ -287,10 +287,10 @@
 #pragma mark Internal handling
 #pragma mark Populate nodes with data returned from ICA:
 
-- (void) _addICADeviceList:(NSArray *) devices toNode:(IMBNode *)inNode
+- (void) _addICADeviceList:(NSArray*)devices toNode:(IMBNode*)inNode
 {
 	// we retrieved a device list
-	NSMutableArray *subnodes = [NSMutableArray array];
+	NSMutableArray *subnodes = [inNode mutableArrayForPopulatingSubnodes];
 	NSMutableArray *deviceIdentifiers = [NSMutableArray array];
 	
 	for( NSDictionary *anDevice in devices )
@@ -301,7 +301,6 @@
 		[subnodes addObject:deviceNode];
 	}
 	
-	inNode.subNodes = subnodes;
 	inNode.objects = [NSArray array]; // prevent endless loop
 	
 	// now add any unlisted devices with an placeholder node
@@ -317,11 +316,11 @@
 // recursive creation of subtree nodes 
 // R: object had children
 
-- (BOOL) _addICATree:(NSArray *)subItems toNode:(IMBNode *)inNode
+- (BOOL) _addICATree:(NSArray*)subItems toNode:(IMBNode*)inNode
 {
 	DEBUGLOG( @"%s\n inNode %@",__PRETTY_FUNCTION__, inNode );
 
-	NSMutableArray *subnodes = [NSMutableArray array];
+	NSMutableArray *subnodes = [inNode mutableArrayForPopulatingSubnodes];
 	NSMutableArray *objects = [NSMutableArray array];
 	
 	for( NSDictionary *anItem in subItems )
@@ -384,10 +383,9 @@
 		}
 		
 	}
-	inNode.subNodes = subnodes;
+
 	inNode.objects = objects;
 	return [subnodes count] > 0;
-	
 }
 
 - (void) _addICAObject:(NSDictionary *) anItem toObjectArray:(NSMutableArray *) objectArray
