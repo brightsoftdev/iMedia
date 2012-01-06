@@ -243,6 +243,7 @@
 		node.name = inOldNode.name;
 		node.icon = inOldNode.icon;
 		node.groupType = inOldNode.groupType;
+		node.isTopLevelNode = inOldNode.isTopLevelNode;
 		node.leaf = inOldNode.leaf;
 		node.parser = self;
 	}

@@ -196,6 +196,7 @@
 		node.icon = inOldNode.icon;
 		node.attributes = inOldNode.attributes;
 		node.groupType = inOldNode.groupType;
+		node.isTopLevelNode = inOldNode.isTopLevelNode;
 		node.leaf = inOldNode.leaf;
 		node.parser = self;
 		node.watcherType = inOldNode.watcherType;

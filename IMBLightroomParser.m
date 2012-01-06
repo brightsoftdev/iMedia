@@ -360,6 +360,7 @@ static NSArray* sSupportedUTIs = nil;
 		node.parser = self;
 		node.leaf = inOldNode.leaf;
 		node.groupType = inOldNode.groupType;
+		node.isTopLevelNode = inOldNode.isTopLevelNode;
 		node.attributes = [[inOldNode.attributes copy] autorelease];
 	}
 	
