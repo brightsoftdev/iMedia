@@ -146,6 +146,7 @@ static NSMutableDictionary* sLibraryControllers = nil;
 - (void) _reloadNodesWithWatchedPath:(NSString*)inPath;
 - (void) _reloadNodesWithWatchedPath:(NSString*)inPath nodes:(NSArray*)inNodes;
 - (void) _unmountNodes:(NSArray*)inNodes onVolume:(NSString*)inVolume;
+- (NSUInteger) _indexForNode:(IMBNode*)inNode parentNode:(IMBNode*)inParentNode;
 @end
 
 
@@ -752,7 +753,8 @@ static NSMutableDictionary* sLibraryControllers = nil;
         {
 			if (parentNode)
 			{
-				index = [inOldNode index];
+//				index = [inOldNode index];
+				index = [self _indexForNode:inOldNode parentNode:parentNode];
 				[[parentNode mutableArrayForPopulatingSubnodes] replaceObjectAtIndex:index withObject:inNewNode];
 			}
 			else
@@ -768,7 +770,8 @@ static NSMutableDictionary* sLibraryControllers = nil;
         {
 			if (parentNode)
 			{
-				index = [inOldNode index];
+//				index = [inOldNode index];
+				index = [self _indexForNode:inOldNode parentNode:parentNode];
 				[[parentNode mutableArrayForPopulatingSubnodes] removeObjectAtIndex:index];
 			}
 			else
@@ -1271,6 +1274,40 @@ static NSMutableDictionary* sLibraryControllers = nil;
 }
 
 
+//----------------------------------------------------------------------------------------------------------------------
+
+
+// Helper method to get the index of a node in its parent node. Please note that the first attempt can
+// fail if inNode.parentNode is nil. In this case we'll try a fallback mechanism to find the correct
+// index via the identifier strings...
+
+- (NSUInteger) _indexForNode:(IMBNode*)inNode parentNode:(IMBNode*)inParentNode
+{
+	NSUInteger index = NSNotFound;
+	
+	if (inParentNode)
+	{
+		index = [inNode index];
+		
+		if (index == NSNotFound)
+		{
+			NSUInteger n = [inParentNode countOfSubnodes];
+			
+			for (NSUInteger i=0; i<n; i++)
+			{
+				IMBNode* node = [inParentNode objectInSubnodesAtIndex:i];
+				if ([node.identifier isEqualToString:inNode.identifier])
+				{
+					return i;
+				}	
+			}
+		}
+	}
+	
+	return index;
+}
+				
+				
 //----------------------------------------------------------------------------------------------------------------------
 
 
