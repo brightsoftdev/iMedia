@@ -526,6 +526,8 @@ static NSMutableDictionary* sLibraryControllers = nil;
 
 - (void) reloadNode:(IMBNode*)inNode parser:(IMBParser*)inParser
 {
+//	NSLog(@"%s inNode=%@",__FUNCTION__,inNode.identifier);
+	
 	BOOL shouldCreateNode = _isReplacingNode==NO;
 
 	if (_delegate != nil && [_delegate respondsToSelector:@selector(libraryController:shouldCreateNodeWithParser:)])

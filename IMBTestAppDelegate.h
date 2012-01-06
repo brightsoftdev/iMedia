@@ -85,6 +85,8 @@
 - (IBAction) toggleDragDestinationWindow:(id)inSender;
 - (void) concludeDragOperationForObjects:(NSArray*)inObjects;
 
+- (void) stressTest;
+
 @end
 
 

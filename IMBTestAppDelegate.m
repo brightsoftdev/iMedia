@@ -71,6 +71,7 @@
 #define LOG_CREATE_NODE 0
 #define LOG_POPULATE_NODE 0
 #define CUSTOM_USER_INTERFACE 0
+#define STRESS_TEST 1
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -172,6 +173,10 @@
 	
 	[self togglePanel:nil];
 	
+#endif
+
+#if STRESS_TEST
+	[self performSelector:@selector(stressTest) withObject:nil afterDelay:1.0];
 #endif
 }
 
@@ -602,13 +607,114 @@
 	}
 }
 
+
+//----------------------------------------------------------------------------------------------------------------------
+
+
+- (NSString*) _xmlPathForKey:(NSString*)inKey
+{
+	NSString* path = nil;
+	CFArrayRef recentLibraries = CFPreferencesCopyAppValue((CFStringRef)inKey,(CFStringRef)@"com.apple.iApps");
+	NSArray* libraries = (NSArray*)recentLibraries;
+		
+	for (NSString* library in libraries)
+	{
+		NSURL* url = [NSURL URLWithString:library];
+		path = [url path];
+	}
+	
+	if (recentLibraries) CFRelease(recentLibraries);
+	return path;
+}
+
+
+- (double) _randomDelay
+{
+	double delay = (double)rand() / (double)RAND_MAX;
+	delay = 10.0 * delay * delay;
+	return delay;
+}
+
+
+- (void) stressTestiPhoto
+{
+	NSLog(@"%s",__FUNCTION__);
+
+	// Rewrite the xml file...
+	
+	NSString* path = [self _xmlPathForKey:@"iPhotoRecentDatabases"];
+	NSDictionary* attributes = [NSDictionary dictionaryWithObjectsAndKeys:[NSDate date],NSFileModificationDate,nil];
+	[[NSFileManager imb_threadSafeManager] setAttributes:attributes ofItemAtPath:path error:nil];
+//	NSData* data = [NSData dataWithContentsOfFile:path];
+//	[data writeToFile:path atomically:NO];
+	
+	// Repeat after a random time...
+	
+	[self performSelector:@selector(stressTestiPhoto) withObject:nil afterDelay:[self _randomDelay]];
+}
+
+
+- (void) stressTestiTunes
+{
+	NSLog(@"%s",__FUNCTION__);
+
+	// Rewrite the xml file...
+	
+	NSString* path = [self _xmlPathForKey:@"iTunesRecentDatabases"];
+	NSDictionary* attributes = [NSDictionary dictionaryWithObjectsAndKeys:[NSDate date],NSFileModificationDate,nil];
+	[[NSFileManager imb_threadSafeManager] setAttributes:attributes ofItemAtPath:path error:nil];
+//	NSData* data = [NSData dataWithContentsOfFile:path];
+//	[data writeToFile:path atomically:NO];
+
+	// Repeat after a random time...
+	
+	[self performSelector:@selector(stressTestiTunes) withObject:nil afterDelay:[self _randomDelay]];
+}
+
+
+- (void) stressTestAperture
+{
+	NSLog(@"%s",__FUNCTION__);
+
+	// Rewrite the xml file...
+	
+	NSString* path = [self _xmlPathForKey:@"ApertureLibraries"];
+	NSDictionary* attributes = [NSDictionary dictionaryWithObjectsAndKeys:[NSDate date],NSFileModificationDate,nil];
+	[[NSFileManager imb_threadSafeManager] setAttributes:attributes ofItemAtPath:path error:nil];
+//	NSData* data = [NSData dataWithContentsOfFile:path];
+//	[data writeToFile:path atomically:NO];
+
+	// Repeat after a random time...
+	
+	[self performSelector:@selector(stressTestAperture) withObject:nil afterDelay:[self _randomDelay]];
+}
+
+
+- (void) stressTest
+{
+	[NSThread detachNewThreadSelector:@selector(_stressTest) toTarget:self withObject:nil];
+}
+
+
+- (void) _stressTest
+{
+	[self performSelector:@selector(stressTestiPhoto) withObject:nil afterDelay:[self _randomDelay]];
+	[self performSelector:@selector(stressTestiTunes) withObject:nil afterDelay:[self _randomDelay]];
+	[self performSelector:@selector(stressTestAperture) withObject:nil afterDelay:[self _randomDelay]];
+	
+	[[NSRunLoop currentRunLoop] run];
+}
+
+
 @end
 
 
 //----------------------------------------------------------------------------------------------------------------------
 
+
 #pragma mark -
 #pragma mark Debugging Convenience
+
 
 #ifdef DEBUG
 
@@ -700,3 +806,5 @@
 @end
 
 #endif
+
+
