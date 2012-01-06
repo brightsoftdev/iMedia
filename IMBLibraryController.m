@@ -1211,17 +1211,14 @@ static NSMutableDictionary* sLibraryControllers = nil;
 #pragma mark 
 #pragma mark Nodes Accessors
 
-// Returns the root node for the specified parser...
+// Returns the root node for the specified parser. Please note that group nodes (LIBRARIES,FOLDERS,INTERNET,etc)
+// any to nodes at the root level, so if we encounter one of those, we need to dig one level deeper...
 
 - (IMBNode*) topLevelNodeForParser:(IMBParser*)inParser
 {
 	for (IMBNode* node in self.subnodes)
 	{
-		if (node.parser == inParser)
-		{
-			return node;
-		}
-		else if (node.isGroup)
+		if (node.isGroup)
 		{
 			for (IMBNode* subnode in node.subnodes)
 			{
@@ -1230,6 +1227,10 @@ static NSMutableDictionary* sLibraryControllers = nil;
 					return subnode;
 				}
 			}	
+		}
+		else if (node.parser == inParser)
+		{
+			return node;
 		}
 	}
 	
