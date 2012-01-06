@@ -162,7 +162,6 @@
 		D052B0961053B0F700988F53 /* IMBProgressWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = D052B0941053B0F700988F53 /* IMBProgressWindowController.m */; };
 		D052B0C11053B4AB00988F53 /* IMBProgress.xib in Resources */ = {isa = PBXBuildFile; fileRef = D052B0C01053B4AB00988F53 /* IMBProgress.xib */; };
 		D05A9493102EB022005DF9CE /* IMBImageCaptureParser.h in Headers */ = {isa = PBXBuildFile; fileRef = D05A9491102EB022005DF9CE /* IMBImageCaptureParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D05A9494102EB022005DF9CE /* IMBImageCaptureParser.m in Sources */ = {isa = PBXBuildFile; fileRef = D05A9492102EB022005DF9CE /* IMBImageCaptureParser.m */; };
 		D07BF171104C426000B6C87D /* ObjectiveFlickr.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = D0CEC48C1047BF7A00FA2A31 /* ObjectiveFlickr.framework */; };
 		D08070BF10442CD700891137 /* IMBMovieViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = D08070BD10442CD700891137 /* IMBMovieViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D08070C010442CD700891137 /* IMBMovieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D08070BE10442CD700891137 /* IMBMovieViewController.m */; };
@@ -1813,7 +1812,6 @@
 				D0CD1E55101A452A000FA505 /* IMBiPhotoParser.m in Sources */,
 				D0C2DAF31024178E001B1198 /* IMBObjectViewController.m in Sources */,
 				D0C2DD0E1025905A001B1198 /* IMBImageViewController.m in Sources */,
-				D05A9494102EB022005DF9CE /* IMBImageCaptureParser.m in Sources */,
 				D049EF5610346C1C003CC49C /* IMBNodeCell.m in Sources */,
 				D049F00B1034993E003CC49C /* NSImage+iMedia.m in Sources */,
 				D049F0431034A86B003CC49C /* IMBIconCache.m in Sources */,
