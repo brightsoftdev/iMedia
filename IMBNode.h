@@ -119,7 +119,7 @@
 // will be created lazily at another time. If on the other hand .subnodes is an empty array, then loading has
 // already happend and found there to be no subnodes. The -isPopulated method performs this check, potentially
 // making your code more readable.
-@property (copy,readonly) NSArray* subnodes;	
+@property (retain,readonly) NSArray* subnodes;	
 
 // For efficiency, you can use these KVC-compliant accessors if needed
 - (NSUInteger) countOfSubnodes;

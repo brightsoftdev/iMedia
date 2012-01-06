@@ -237,7 +237,7 @@
 
 - (NSArray*) subnodes
 {
-	return [[_subnodes copy] autorelease];
+	return [[_subnodes retain] autorelease];
 }
 
 
