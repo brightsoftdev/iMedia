@@ -418,7 +418,7 @@ static NSMutableDictionary* sLibraryControllers = nil;
 #pragma mark 
 #pragma mark Node Accessors
 
-- (NSArray *) subnodes { return [[_subnodes copy] autorelease]; }
+- (NSArray *) subnodes { return [[_subnodes retain] autorelease]; }
 
 - (NSUInteger) countOfSubnodes
 {

@@ -129,7 +129,7 @@ extern NSString* kIMBNodesDidChangeNotification;
 
 // Node accessors (must only be called on the main thread)...
 
-@property (nonatomic, copy, readonly) NSArray* subnodes;
+@property (nonatomic, retain, readonly) NSArray* subnodes;
 - (NSUInteger) countOfSubnodes;
 - (IMBNode*) objectInSubnodesAtIndex:(NSUInteger)inIndex;
 		
