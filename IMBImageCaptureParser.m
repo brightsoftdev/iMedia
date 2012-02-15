@@ -163,6 +163,8 @@
 
 - (id) initWithMediaType:(NSString *) anType
 {
+	NSLog( @"%s WARNING - using (incomplete) IMBImageCaptureParser!",__FUNCTION__);
+
 	self = [super initWithMediaType:anType];
 	if (self != nil) {		
 		// we prepopulate the root mediasource with the ICA ID of the list of cameras
