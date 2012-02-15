@@ -87,6 +87,7 @@
 	IMBLibraryController* _libraryController;
 	NSString* _selectedNodeIdentifier;
 	NSMutableArray* _expandedNodeIdentifiers;
+	NSPoint _nodeOutlineViewSavedVisibleRectOrigin;
 	BOOL _isRestoringState;
 	IMBParser* _selectedParser;
 	
